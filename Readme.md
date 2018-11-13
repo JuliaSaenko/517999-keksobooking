@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Юлия Саенко](https://up.htmlacademy.ru/javascript/16/user/517999).
-* Наставник: `Неизвестно`.
+* Наставник: [Александр Сушко](https://htmlacademy.ru/profile/sashasushko).
 
 ---
 
