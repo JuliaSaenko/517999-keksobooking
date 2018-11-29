@@ -19,8 +19,8 @@ var NOTICE_PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
 
-var PIN_WIDTH = 50;
-var PIN_HEIGHT = 70;
+var PIN_WIDTH = 40;
+var PIN_HEIGHT = 40;
 var BLOCK_WIDTH = document.querySelector('.map').clientWidth;
 
 
@@ -38,10 +38,10 @@ var getRandomElementFromArray = function (array) {
   return array[getRandomIntegerFromInterval(0, array.length - 1)];
 };
 
-var locationX = getRandomIntegerFromInterval(PIN_WIDTH / 2, BLOCK_WIDTH - PIN_WIDTH / 2);
-var locationY = getRandomIntegerFromInterval(130, 630);
-
 var createNotice = function (count) {
+  var locationX = getRandomIntegerFromInterval(PIN_WIDTH / 2, BLOCK_WIDTH - PIN_WIDTH / 2);
+  var locationY = getRandomIntegerFromInterval(130, 630);
+
   var notice = {
     'author': {
       'avatar': 'img/avatars/user' + (count + 1 < 10 ? '0' + (count + 1) : count + 1) + '.png'
