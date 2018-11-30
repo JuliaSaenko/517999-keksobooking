@@ -30,6 +30,16 @@ map.classList.remove('map--faded');
 var mapContainer = map.querySelector('.map__filters-container');
 var mapCardTemplate = document.querySelector('template').content.querySelector('article.map__card');
 
+var shuffleArray = function (array) {
+  for (var i = array.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
+  return array;
+};
+
 var getRandomIntegerFromInterval = function (min, max) {
   return Math.floor(min + Math.random() * (max + 1 - min));
 };
@@ -57,7 +67,7 @@ var createNotice = function (count) {
       'checkout': getRandomElementFromArray(NOTICE_CHECK_OUT_IN),
       'features': NOTICE_FEATURES.slice(getRandomIntegerFromInterval(-(NOTICE_FEATURES.length - 1), NOTICE_FEATURES.length - 1)),
       'description': '',
-      'photos': NOTICE_PHOTOS,
+      'photos': shuffleArray(NOTICE_PHOTOS),
     },
     'location': {
       'x': locationX,
