@@ -48,6 +48,15 @@ var getRandomElementFromArray = function (array) {
   return array[getRandomIntegerFromInterval(0, array.length - 1)];
 };
 
+var getRandomNumber = function (from, to) {
+  return Math.floor(Math.random() * (to - from + 1) + from);
+};
+
+var getRandomLengthOfArray = function (array) {
+  shuffleArray(array);
+  return array.slice(getRandomNumber(1, array.length - 1));
+};
+
 var createNotice = function (count) {
   var locationX = getRandomIntegerFromInterval(PIN_WIDTH / 2, BLOCK_WIDTH - PIN_WIDTH / 2);
   var locationY = getRandomIntegerFromInterval(130, 630);
@@ -65,7 +74,7 @@ var createNotice = function (count) {
       'guests': getRandomIntegerFromInterval(1, 8),
       'checkin': getRandomElementFromArray(NOTICE_CHECK_OUT_IN),
       'checkout': getRandomElementFromArray(NOTICE_CHECK_OUT_IN),
-      'features': NOTICE_FEATURES.slice(getRandomIntegerFromInterval(-(NOTICE_FEATURES.length - 1), NOTICE_FEATURES.length - 1)),
+      'features': getRandomLengthOfArray(NOTICE_FEATURES),
       'description': '',
       'photos': shuffleArray(NOTICE_PHOTOS),
     },
@@ -118,22 +127,25 @@ function renderFeatures(features) {
   return fragment;
 }
 
-function renderPhotos(photos, template) {
+var cardTemplate = document.querySelector('#card').content;
+
+var renderPhoto = function (card) {
   var fragment = document.createDocumentFragment();
-  for (var i = 0; i < photos.length; i++) {
-    var photosItem = template.cloneNode(true);
-    photosItem.src = photos[i];
-    fragment.appendChild(photosItem);
+
+  for (var i = 0; i < card.offer.photos.length; i++) {
+    var createImg = cardTemplate.querySelector('.map__card')
+    .querySelector('.popup__photo').cloneNode(true);
+
+    createImg.src = card.offer.photos[i];
+    fragment.appendChild(createImg);
   }
   return fragment;
-}
+};
 
 var renderCards = function (card) {
   var cardElement = mapCardTemplate.cloneNode(true);
   var offerType;
   var featuresItems = cardElement.querySelector('.popup__features');
-  var photosItems = cardElement.querySelector('.popup__photos');
-  var photoTemplate = photosItems.querySelector('img');
 
   if (card.offer.type === 'flat') {
     offerType = 'Квартира';
@@ -151,12 +163,13 @@ var renderCards = function (card) {
   cardElement.querySelector('.popup__type').textContent = offerType;
   cardElement.querySelector('.popup__text--capacity').textContent = card.offer.rooms + ' комнаты для ' + card.offer.guests + ' гостей';
   cardElement.querySelector('.popup__text--time').textContent = 'Заезд после' + card.offer.checkin + ' выезд до ' + card.offer.checkout;
-  featuresItems.innerHTML = '';
-  cardElement.querySelector('.popup__features').appendChild(renderFeatures(card.offer.features));
   cardElement.querySelector('.popup__description').textContent = card.offer.description;
-  photosItems.innerHTML = '';
-  photosItems.appendChild(renderPhotos(card.offer.photos, photoTemplate));
+  cardElement.querySelector('.popup__photos').textContent = '';
+  cardElement.querySelector('.popup__photos').appendChild(renderPhoto(card));
   cardElement.querySelector('.popup__avatar').src = card.author.avatar;
+
+  featuresItems.textContent = '';
+  featuresItems.appendChild(renderFeatures(card.offer.features));
 
   return cardElement;
 };
