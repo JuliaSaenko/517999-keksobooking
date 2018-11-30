@@ -98,9 +98,32 @@ function renderPins(list) {
   return fragment;
 }
 
+function renderFeatures(features) {
+  var fragment = document.createDocumentFragment();
+  for (var i = 0; i < features.length; i++) {
+    var featuresItem = document.createElement('li');
+    featuresItem.className = 'popup__feature popup__feature--' + features[i];
+    fragment.appendChild(featuresItem);
+  }
+  return fragment;
+}
+
+function renderPhotos(photos, template) {
+  var fragment = document.createDocumentFragment();
+  for (var i = 0; i < photos.length; i++) {
+    var photosItem = template.cloneNode(true);
+    photosItem.src = photos[i];
+    fragment.appendChild(photosItem);
+  }
+  return fragment;
+}
+
 var renderCards = function (card) {
   var cardElement = mapCardTemplate.cloneNode(true);
-  var offerType = '';
+  var offerType;
+  var featuresItems = cardElement.querySelector('.popup__features');
+  var photosItems = cardElement.querySelector('.popup__photos');
+  var photoTemplate = photosItems.querySelector('img');
 
   if (card.offer.type === 'flat') {
     offerType = 'Квартира';
@@ -118,23 +141,12 @@ var renderCards = function (card) {
   cardElement.querySelector('.popup__type').textContent = offerType;
   cardElement.querySelector('.popup__text--capacity').textContent = card.offer.rooms + ' комнаты для ' + card.offer.guests + ' гостей';
   cardElement.querySelector('.popup__text--time').textContent = 'Заезд после' + card.offer.checkin + ' выезд до ' + card.offer.checkout;
+  featuresItems.innerHTML = '';
+  cardElement.querySelector('.popup__features').appendChild(renderFeatures(card.offer.features));
   cardElement.querySelector('.popup__description').textContent = card.offer.description;
+  photosItems.innerHTML = '';
+  photosItems.appendChild(renderPhotos(card.offer.photos, photoTemplate));
   cardElement.querySelector('.popup__avatar').src = card.author.avatar;
-
-  var featuresList = cardElement.querySelector('.popup__features');
-  var featuresItem = featuresList.querySelector('li');
-  for (var i = 0; i < card.offer.features.length; i++) {
-    featuresItem.textContent = card.offer.features[i];
-  }
-
-  var noticePhotos = cardElement.querySelector('.popup__photos');
-  var noticePhoto = cardElement.querySelector('.popup__photo');
-  noticePhoto.src = card.offer.photos[0];
-  for (var j = 1; j < card.offer.photos.length; j++) {
-    var photoElement = noticePhoto.cloneNode(true);
-    photoElement.src = card.offer.photos[j];
-    noticePhotos.appendChild(photoElement);
-  }
 
   return cardElement;
 };
