@@ -10,7 +10,7 @@ var NOTICE_TITLES = [
   'Уютное бунгало далеко от моря',
   'Неуютное бунгало по колено в воде'
 ];
-var NOTICE_TYPES = ['flat', 'house', 'bungalo'];
+var NOTICE_TYPES = ['palace', 'flat', 'house', 'bungalo'];
 var NOTICE_CHECK_OUT_IN = ['12:00', '13:00', '14:00'];
 var NOTICE_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var NOTICE_PHOTOS = [
@@ -31,13 +31,14 @@ var mapContainer = map.querySelector('.map__filters-container');
 var mapCardTemplate = document.querySelector('template').content.querySelector('article.map__card');
 
 var shuffleArray = function (array) {
+  var clonedArray = array.slice();
   for (var i = array.length - 1; i > 0; i--) {
     var j = Math.floor(Math.random() * (i + 1));
     var temp = array[i];
     array[i] = array[j];
     array[j] = temp;
   }
-  return array;
+  return clonedArray;
 };
 
 var getRandomIntegerFromInterval = function (min, max) {
@@ -52,7 +53,7 @@ var getRandomNumber = function (from, to) {
   return Math.floor(Math.random() * (to - from + 1) + from);
 };
 
-var getRandomLengthOfArray = function (array) {
+var getRandomSubarray = function (array) {
   shuffleArray(array);
   return array.slice(getRandomNumber(1, array.length - 1));
 };
@@ -74,7 +75,7 @@ var createNotice = function (count) {
       'guests': getRandomIntegerFromInterval(1, 8),
       'checkin': getRandomElementFromArray(NOTICE_CHECK_OUT_IN),
       'checkout': getRandomElementFromArray(NOTICE_CHECK_OUT_IN),
-      'features': getRandomLengthOfArray(NOTICE_FEATURES),
+      'features': getRandomSubarray(NOTICE_FEATURES),
       'description': '',
       'photos': shuffleArray(NOTICE_PHOTOS),
     },
@@ -144,27 +145,23 @@ var renderPhoto = function (card) {
 
 var renderCards = function (card) {
   var cardElement = mapCardTemplate.cloneNode(true);
-  var offerType;
   var featuresItems = cardElement.querySelector('.popup__features');
-
-  if (card.offer.type === 'flat') {
-    offerType = 'Квартира';
-  } else if (card.offer.type === 'bungalo') {
-    offerType = 'Бунгало';
-  } else if (card.offer.type === 'house') {
-    offerType = 'Дом';
-  } else if (card.offer.type === 'palace') {
-    offerType = 'Дворец';
-  }
+  var photosItems = cardElement.querySelector('.popup__photos');
+  var PlaceType = {
+    palace: 'Дворец',
+    flat: 'Квартира',
+    house: 'Дом',
+    bungalo: 'Бунгало'
+  };
 
   cardElement.querySelector('.popup__title').textContent = card.offer.title;
   cardElement.querySelector('.popup__text--address').textContent = card.offer.address;
   cardElement.querySelector('.popup__text--price').textContent = card.offer.price + '₽/ночь';
-  cardElement.querySelector('.popup__type').textContent = offerType;
+  cardElement.querySelector('.popup__type').textContent = PlaceType[card.offer.type];
   cardElement.querySelector('.popup__text--capacity').textContent = card.offer.rooms + ' комнаты для ' + card.offer.guests + ' гостей';
   cardElement.querySelector('.popup__text--time').textContent = 'Заезд после' + card.offer.checkin + ' выезд до ' + card.offer.checkout;
   cardElement.querySelector('.popup__description').textContent = card.offer.description;
-  cardElement.querySelector('.popup__photos').textContent = '';
+  photosItems.innerHTML = '';
   cardElement.querySelector('.popup__photos').appendChild(renderPhoto(card));
   cardElement.querySelector('.popup__avatar').src = card.author.avatar;
 
