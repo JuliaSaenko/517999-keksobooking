@@ -30,14 +30,12 @@ map.classList.remove('map--faded');
 var mapContainer = map.querySelector('.map__filters-container');
 var mapCardTemplate = document.querySelector('template').content.querySelector('article.map__card');
 var mapPinsList = map.querySelector('.map__pins');
-var mainPin = mapPinsList.querySelector('.map__pin--main'); //
-var mapPin = mapPinsList.querySelector('.map__pin');
-var adForm = document.querySelector('.ad-form'); // переименовать на NOTICE?
+var mainPin = mapPinsList.querySelector('.map__pin--main');
+var adForm = document.querySelector('.ad-form');
 var adFormFieldsets = adForm.querySelectorAll('fieldset');
-var adFormAddressFieldset = adForm.querySelector('#address'); //
+var adFormAddressFieldset = adForm.querySelector('#address');
 
 var ESC_KEYCODE = 27;
-var ENTER_KEYCODE = 13;
 
 var shuffleArray = function (array) {
   var clonedArray = array.slice();
@@ -171,26 +169,14 @@ var onPopupEscPress = function (evt) {
   }
 };
 
-var openPopup = function () {
+var openPopup = function (card) {
   closePopup();
-  map.insertBefore(renderCards(getRandomElementFromArray(notices)), mapContainer);
+  map.insertBefore(renderCards(card), mapContainer);
   document.addEventListener('keydown', onPopupEscPress);
 
   var closePopupButton = document.querySelector('.popup__close');
   closePopupButton.addEventListener('click', closePopup);
 };
-
-mapPin.addEventListener('keydown', function (evt) {
-  if (evt.keyCode === ENTER_KEYCODE) {
-    openPopup();
-  }
-});
-
-mapPin.addEventListener('keydown', function (evt) {
-  if (evt.keyCode === ENTER_KEYCODE) {
-    closePopup();
-  }
-});
 
 var renderPin = function (notice) {
   var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
@@ -201,7 +187,7 @@ var renderPin = function (notice) {
   pin.querySelector('img').src = notice.author.avatar;
   pin.querySelector('img').alt = notice.offer.title;
   pin.addEventListener('click', function () {
-    openPopup();
+    openPopup(notice);
   });
 
   return pin;
