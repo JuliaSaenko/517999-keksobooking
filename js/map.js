@@ -11,6 +11,28 @@ var NOTICE_TITLES = [
   'Неуютное бунгало по колено в воде'
 ];
 var NOTICE_TYPES = ['palace', 'flat', 'house', 'bungalo'];
+
+var PlaceType = {
+  palace: 'Дворец',
+  flat: 'Квартира',
+  house: 'Дом',
+  bungalo: 'Бунгало'
+};
+
+var GuestsInRoom = {
+  ROOM_1: ['1'],
+  ROOM_2: ['1', '2'],
+  ROOM_3: ['1', '2', '3'],
+  ROOM_100: ['0']
+};
+
+var PrisePerPlase = {
+  bungalo: 0,
+  flat: 1000,
+  house: 5000,
+  palace: 10000
+};
+
 var NOTICE_CHECK_OUT_IN = ['12:00', '13:00', '14:00'];
 var NOTICE_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var NOTICE_PHOTOS = [
@@ -35,6 +57,12 @@ var mainPin = mapPinsList.querySelector('.map__pin--main');
 var adForm = document.querySelector('.ad-form');
 var adFormFieldsets = adForm.querySelectorAll('fieldset');
 var adFormAddressFieldset = adForm.querySelector('#address');
+var adFormRoomFieldset = adForm.querySelector('#room_number');
+var adFormCapasityFieldset = adForm.querySelector('#capacity');
+var adFormPriceFieldset = adForm.querySelector('#price');
+var adFormTypeFieldset = adForm.querySelector('#type');
+var adFormCheckInFieldset = adForm.querySelector('#timein');
+var adFormCheckOutFieldset = adForm.querySelector('#timeout');
 
 var ESC_KEYCODE = 27;
 
@@ -103,7 +131,7 @@ var getNotices = function (count) {
   return notices;
 };
 
-function renderFeatures(features) {
+var renderFeatures = function (features) {
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < features.length; i++) {
     var featuresItem = document.createElement('li');
@@ -111,7 +139,7 @@ function renderFeatures(features) {
     fragment.appendChild(featuresItem);
   }
   return fragment;
-}
+};
 
 var cardTemplate = document.querySelector('#card').content;
 
@@ -132,12 +160,6 @@ var renderCards = function (card) {
   var cardElement = mapCardTemplate.cloneNode(true);
   var featuresItems = cardElement.querySelector('.popup__features');
   var photosItems = cardElement.querySelector('.popup__photos');
-  var PlaceType = {
-    palace: 'Дворец',
-    flat: 'Квартира',
-    house: 'Дом',
-    bungalo: 'Бунгало'
-  };
 
   cardElement.querySelector('.popup__title').textContent = card.offer.title;
   cardElement.querySelector('.popup__text--address').textContent = card.offer.address;
@@ -194,14 +216,14 @@ var renderPin = function (notice) {
   return pin;
 };
 
-function renderPins(list) {
+var renderPins = function (list) {
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < list.length; i++) {
     var pins = renderPin(list[i]);
     fragment.appendChild(pins);
   }
   return fragment;
-}
+};
 
 var notices = getNotices(8);
 var pins = renderPins(notices);
@@ -218,19 +240,15 @@ var setAddressCoords = function (x, y) {
   adFormAddressFieldset.value = x + ', ' + y;
 };
 
-//  var getPinCoord = function (pin, sharpCoord) {
-//    var pinX = Math.floor(pin.offsetLeft + pin.clientWidth / 2);
-//    var pinY = Math.floor(pin.offsetTop + pin.clientHeight / 2);
-//    if (sharpCoord) {
-//      pinY = Math.floor(pin.offsetTop + pin.clientHeight);
-//    }
-//    return {x: pinX, y: pinY};
-//  };
-
-// var setPinCoord = function (pin, sharp) {
-//   var pinCoord = getPinCoord(pin, sharp);
-//   adFormAddressFieldset.value = pinCoord.x + ', ' + pinCoord.y;
-// };
+var roomChangingFieldset = function () {
+  var guests = GuestsInRoom['ROOM_' + adFormRoomFieldset.value];
+  var isMatch = guests.includes(adFormCapasityFieldset.value);
+  if (isMatch) {
+    adFormCapasityFieldset.setCustomValidity('');
+  } else {
+    adFormCapasityFieldset.setCustomValidity('"Это вам не подходит"');
+  }
+};
 
 var onMainPinMouseUp = function () {
   enabledMainPage();
@@ -244,3 +262,20 @@ for (var i = 0; i < adFormFieldsets.length; i++) {
 }
 
 mainPin.addEventListener('mouseup', onMainPinMouseUp);
+
+adFormRoomFieldset.addEventListener('change', roomChangingFieldset);
+adFormCapasityFieldset.addEventListener('change', roomChangingFieldset);
+
+adFormTypeFieldset.addEventListener('change', function () {
+  var key = adFormTypeFieldset.value.toUpperCase();
+  adFormPriceFieldset.min = PrisePerPlase[key];
+  adFormPriceFieldset.placeholder = PrisePerPlase[key];
+});
+adFormCheckInFieldset.addEventListener('change', function () {
+  var checkTime = adFormCheckInFieldset.value;
+  adFormCheckOutFieldset.value = checkTime;
+});
+adFormCheckOutFieldset.addEventListener('change', function () {
+  var checkTime = adFormCheckOutFieldset.value;
+  adFormCheckInFieldset.value = checkTime;
+});
