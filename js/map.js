@@ -19,11 +19,11 @@ var PlaceType = {
   bungalo: 'Бунгало'
 };
 
-var GuestInRoom = {
+var GuestsInRoom = {
   ROOM_1: ['1'],
   ROOM_2: ['1', '2'],
   ROOM_3: ['1', '2', '3'],
-  ROOM_4: ['0']
+  ROOM_100: ['0']
 };
 
 var PrisePerPlase = {
@@ -241,14 +241,12 @@ var setAddressCoords = function (x, y) {
 };
 
 var roomChangingFieldset = function () {
-  var value = adFormCapasityFieldset.value;
-  var key = 'ROOM_' + adFormRoomFieldset.value;
-  if (key === 'ROOM_100' && value !== '0') {
-    adFormCapasityFieldset.setCustomValidity('Не для гостей');
-  } else if (GuestInRoom[key].indexOf(value) < 0) {
-    adFormCapasityFieldset.setCustomValidity('Это Вам не подходит!');
-  } else {
+  var guests = GuestsInRoom['ROOM_' + adFormRoomFieldset.value];
+  var isMatch = guests.includes(adFormCapasityFieldset.value);
+  if (isMatch) {
     adFormCapasityFieldset.setCustomValidity('');
+  } else {
+    adFormCapasityFieldset.setCustomValidity('"Это вам не подходит"');
   }
 };
 
