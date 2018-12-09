@@ -43,7 +43,7 @@ var NOTICE_PHOTOS = [
 
 var PIN_WIDTH = 50;
 var PIN_HEIGHT = 40;
-// var TAIL_HEIGHT = 9;
+var TAIL_HEIGHT = 8;
 var BLOCK_WIDTH = document.querySelector('.map').clientWidth;
 var MAP_WIDTH = 1200;
 var MAP_HEIGHT = 750;
@@ -240,8 +240,8 @@ var enabledMainPage = function () {
   }
 };
 
-var setAddressCoords = function (x, y) {
-  adFormAddressFieldset.value = x + ', ' + y;
+var setAddressCoords = function (coords) {
+  adFormAddressFieldset.value = coords.x + ', ' + coords.y;
 };
 
 var roomChangingFieldset = function () {
@@ -252,6 +252,12 @@ var roomChangingFieldset = function () {
   } else {
     adFormCapasityFieldset.setCustomValidity('"Это вам не подходит"');
   }
+};
+
+var getPinTailCoords = function (pin) {
+  var pinX = Math.floor(pin.offsetLeft + pin.clientWidth / 2);
+  var pinY = Math.floor(pin.offsetTop + pin.clientHeight + TAIL_HEIGHT);
+  return {x: pinX, y: pinY};
 };
 
 var onMainPinMouseUp = function () {
@@ -274,12 +280,13 @@ mainPin.addEventListener('mousedown', function (downEvt) {
   };
 
   var onPinMouseMove = function (moveEvt) {
+    var addressCoords = {};
     moveEvt.preventDefault();
     enabledMainPage(pins);
 
     var Borders = {
-      top: LOCATION_Y_MIN,
-      bottom: LOCATION_Y_MAX,
+      top: LOCATION_Y_MIN - mainPin.clientHeight - TAIL_HEIGHT,
+      bottom: LOCATION_Y_MAX - mainPin.clientHeight - TAIL_HEIGHT,
       left: 0,
       right: map.clientWidth - mainPin.clientWidth
     };
@@ -302,7 +309,9 @@ mainPin.addEventListener('mousedown', function (downEvt) {
       mainPin.style.top = pinShifted.y + 'px';
     }
 
-    setAddressCoords(pinShifted.x, pinShifted.y);
+    // setAddressCoords(pinShifted.x, pinShifted.y);
+    addressCoords = getPinTailCoords(mainPin);
+    setAddressCoords(addressCoords);
 
     startCoords = {
       x: moveEvt.pageX,
