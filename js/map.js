@@ -254,16 +254,25 @@ var roomChangingFieldset = function () {
   }
 };
 
+var addressCoords = {};
+
 var getPinTailCoords = function (pin) {
   var pinX = Math.floor(pin.offsetLeft + pin.clientWidth / 2);
   var pinY = Math.floor(pin.offsetTop + pin.clientHeight + TAIL_HEIGHT);
   return {x: pinX, y: pinY};
 };
 
+var getPinStartCoords = function () {
+  var pinX = MAP_WIDTH / 2;
+  var pinY = MAP_HEIGHT / 2;
+  return {x: pinX, y: pinY};
+};
+
 var onMainPinMouseUp = function () {
   enabledMainPage();
+  addressCoords = getPinStartCoords(mainPin);
   mapPinsList.appendChild(pins);
-  setAddressCoords(MAP_WIDTH / 2, MAP_HEIGHT / 2);
+  setAddressCoords(addressCoords);
   mainPin.removeEventListener('mouseup', onMainPinMouseUp);
 };
 
@@ -280,7 +289,6 @@ mainPin.addEventListener('mousedown', function (downEvt) {
   };
 
   var onPinMouseMove = function (moveEvt) {
-    var addressCoords = {};
     moveEvt.preventDefault();
     enabledMainPage(pins);
 
@@ -309,7 +317,6 @@ mainPin.addEventListener('mousedown', function (downEvt) {
       mainPin.style.top = pinShifted.y + 'px';
     }
 
-    // setAddressCoords(pinShifted.x, pinShifted.y);
     addressCoords = getPinTailCoords(mainPin);
     setAddressCoords(addressCoords);
 
@@ -319,14 +326,15 @@ mainPin.addEventListener('mousedown', function (downEvt) {
     };
   };
 
-  function onPinMouseUp(upEvt) {
+  document.addEventListener('mousemove', onPinMouseMove);
+
+  var onPinMouseUp = function (upEvt) {
     upEvt.preventDefault();
     enabledMainPage(pins);
     document.removeEventListener('mousemove', onPinMouseMove);
     document.removeEventListener('mouseup', onPinMouseUp);
-  }
+  };
 
-  document.addEventListener('mousemove', onPinMouseMove);
   document.addEventListener('mouseup', onPinMouseUp);
 });
 
