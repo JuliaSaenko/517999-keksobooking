@@ -329,7 +329,6 @@ mainPin.addEventListener('mousedown', function (downEvt) {
 
   var onPinMouseUp = function (upEvt) {
     upEvt.preventDefault();
-    enabledMainPage(pins);
     document.removeEventListener('mousemove', onPinMouseMove);
     document.removeEventListener('mouseup', onPinMouseUp);
   };
