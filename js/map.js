@@ -268,12 +268,12 @@ var getPinStartCoords = function () {
   return {x: pinX, y: pinY};
 };
 
-var onMainPinMouseUp = function () {
+var onMainPinMouseDown = function () {
   enabledMainPage();
   addressCoords = getPinStartCoords(mainPin);
   mapPinsList.appendChild(pins);
   setAddressCoords(addressCoords);
-  mainPin.removeEventListener('mouseup', onMainPinMouseUp);
+  mainPin.removeEventListener('mouseup', onMainPinMouseDown);
 };
 
 for (var i = 0; i < adFormFieldsets.length; i++) {
@@ -290,7 +290,6 @@ mainPin.addEventListener('mousedown', function (downEvt) {
 
   var onPinMouseMove = function (moveEvt) {
     moveEvt.preventDefault();
-    enabledMainPage(pins);
 
     var Borders = {
       top: LOCATION_Y_MIN - mainPin.clientHeight - TAIL_HEIGHT,
@@ -338,7 +337,7 @@ mainPin.addEventListener('mousedown', function (downEvt) {
   document.addEventListener('mouseup', onPinMouseUp);
 });
 
-mainPin.addEventListener('mouseup', onMainPinMouseUp);
+mainPin.addEventListener('mouseup', onMainPinMouseDown);
 
 adFormRoomFieldset.addEventListener('change', roomChangingFieldset);
 adFormCapasityFieldset.addEventListener('change', roomChangingFieldset);
