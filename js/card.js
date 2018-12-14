@@ -3,6 +3,7 @@
 (function () {
 
   var map = document.querySelector('.map');
+  var mapContainer = map.querySelector('.map__filters-container');
   var mapCardTemplate = document.querySelector('template').content.querySelector('article.map__card');
   var cardTemplate = document.querySelector('#card').content;
 
@@ -48,6 +49,15 @@
     }
   };
 
+  var openPopup = function (card) {
+    closePopup();
+    map.insertBefore(renderCards(card), mapContainer);
+    document.addEventListener('keydown', onPopupEscPress);
+
+    var closePopupButton = document.querySelector('.popup__close');
+    closePopupButton.addEventListener('click', closePopup);
+  };
+
   var renderCards = function (card) {
     var cardElement = mapCardTemplate.cloneNode(true);
     var featuresItems = cardElement.querySelector('.popup__features');
@@ -73,6 +83,7 @@
   window.card = {
     onPopupEscPress: onPopupEscPress,
     closePopup: closePopup,
+    openPopup: openPopup,
     renderCards: renderCards
   };
 })();

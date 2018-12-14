@@ -24,6 +24,27 @@
   var adFormCheckInFieldset = adForm.querySelector('#timein');
   var adFormCheckOutFieldset = adForm.querySelector('#timeout');
 
+  var adFormFieldsets = adForm.querySelectorAll('fieldset');
+  var adFormAddressFieldset = adForm.querySelector('#address');
+
+  var disabledForm = function () {
+    adForm.classList.add('ad-form--disabled');
+    for (var i = 0; i < adFormFieldsets.length; i++) {
+      adFormFieldsets[i].disabled = true;
+    }
+  };
+
+  var enabledForm = function () {
+    adForm.classList.remove('ad-form--disabled');
+    for (var i = 0; i < adFormFieldsets.length; i++) {
+      adFormFieldsets[i].disabled = false;
+    }
+  };
+
+  var setAddressCoords = function (coords) {
+    adFormAddressFieldset.value = coords.x + ', ' + coords.y;
+  };
+
   var roomChangingFieldset = function () {
     var guests = GuestsInRoom['ROOM_' + adFormRoomFieldset.value];
     var isMatch = guests.includes(adFormCapasityFieldset.value);
@@ -50,4 +71,10 @@
     var checkTime = adFormCheckOutFieldset.value;
     adFormCheckInFieldset.value = checkTime;
   });
+
+  window.form = {
+    disabledForm: disabledForm,
+    enabledForm: enabledForm,
+    setAddressCoords: setAddressCoords
+  };
 })();
