@@ -32,6 +32,9 @@
     for (var i = 0; i < adFormFieldsets.length; i++) {
       adFormFieldsets[i].disabled = true;
     }
+    window.map.disabledMap();
+    adFormPriceFieldset.placeholder = 1000;
+    adFormPriceFieldset.min = 1000;
   };
 
   var enabledForm = function () {
@@ -40,6 +43,17 @@
       adFormFieldsets[i].disabled = false;
     }
   };
+
+  adForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.backend.upload(new FormData(adForm), window.getResultMessage.onSuccessMessageClick, window.getResultMessage.onErrorMessageClick);
+  });
+
+  adForm.addEventListener('reset', function () {
+    setTimeout(function () {
+      window.map.disabledMap();
+    }, 0);
+  });
 
   var setAddressCoords = function (coords) {
     adFormAddressFieldset.value = coords.x + ', ' + coords.y;

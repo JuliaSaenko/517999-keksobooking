@@ -2,17 +2,12 @@
 
 (function () {
 
-  var NOTICES_COUNT = 8;
-
   var TAIL_HEIGHT = 8;
   var MAP_WIDTH = 1200;
   var MAP_HEIGHT = 750;
 
   var LOCATION_Y_MIN = 130; // data
   var LOCATION_Y_MAX = 630; // data
-
-  var data = window.getData(NOTICES_COUNT);
-
 
   var map = document.querySelector('.map'); // card,
   var mapPinsList = map.querySelector('.map__pins');
@@ -21,23 +16,31 @@
   var renderPins = function (list) {
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < list.length; i++) {
-      var pins = window.getPin(list[i]);
-      fragment.appendChild(pins);
+      if (list[i].offer) {
+        var pins = window.getPin(list[i]);
+        fragment.appendChild(pins);
+      }
     }
-    return fragment;
+    mapPinsList.appendChild(fragment);
   };
 
-  var pins = renderPins(data);
-
   var disabledMap = function () {
-    window.getCard.delete();
-    window.getPin.delete();
     document.querySelector('.map').classList.add('map--faded');
+
+    var pinsButtons = mapPinsList.querySelectorAll('.map__pin[type=button]');
+    window.card.closePopup();
+    map.classList.add('map--faded');
+    window.form.disabledForm();
+    for (var i = 0; i < pinsButtons.length; i++) {
+      mapPinsList.removeChild(pinsButtons[i]);
+    }
+    getPinStartCoords(mainPin);
   };
 
   var enabledMap = function () {
     map.classList.remove('map--faded');
     window.form.enabledForm();
+    window.backend.load(renderPins);
   };
 
   var addressCoords = {};
@@ -57,7 +60,6 @@
   var onMainPinMouseDown = function () {
     enabledMap();
     addressCoords = getPinStartCoords(mainPin);
-    mapPinsList.appendChild(pins);
     window.form.setAddressCoords(addressCoords);
     window.form.enabledForm();
     mainPin.removeEventListener('mouseup', onMainPinMouseDown);
@@ -123,6 +125,6 @@
 
   window.map = {
     enabledMap: enabledMap,
-    disabledMap: disabledMap
+    disabledMap: disabledMap,
   };
 })();
