@@ -17,24 +17,30 @@
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < list.length; i++) {
       if (list[i].offer) {
-        var pins = window.getPin(list[i]);
-        fragment.appendChild(pins);
+        var pin = window.getPin(list[i]);
+        fragment.appendChild(pin);
       }
     }
     mapPinsList.appendChild(fragment);
   };
 
+  var removePins = function () {
+    var mapPins = document.querySelectorAll('.map__pin');
+    for (var i = 0; i < mapPins.length; i++) {
+      if (!mapPins[i].classList.contains('map__pin--main')) {
+        mapPinsList.removeChild(mapPins[i]);
+      }
+    }
+  };
+
   var disabledMap = function () {
     document.querySelector('.map').classList.add('map--faded');
-
-    var pinsButtons = mapPinsList.querySelectorAll('.map__pin[type=button]');
     window.card.closePopup();
     map.classList.add('map--faded');
     window.form.disabledForm();
-    for (var i = 0; i < pinsButtons.length; i++) {
-      mapPinsList.removeChild(pinsButtons[i]);
-    }
+    removePins();
     getPinStartCoords(mainPin);
+    mainPin.addEventListener('mouseup', onMainPinMouseDown);
   };
 
   var enabledMap = function () {

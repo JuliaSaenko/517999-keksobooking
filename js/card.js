@@ -109,7 +109,7 @@
       photosItems.innerHTML = '';
       photosItems.appendChild(renderPhoto(card));
     } else {
-      cardElement.removeChild(photosItems); // cardElement.querySelector('.popup__photos')
+      cardElement.removeChild(photosItems);
     }
 
     if (card.author.avatar) {

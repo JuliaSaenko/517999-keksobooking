@@ -32,7 +32,6 @@
     for (var i = 0; i < adFormFieldsets.length; i++) {
       adFormFieldsets[i].disabled = true;
     }
-    window.map.disabledMap();
     adFormPriceFieldset.placeholder = 1000;
     adFormPriceFieldset.min = 1000;
   };
