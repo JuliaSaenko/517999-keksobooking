@@ -132,5 +132,6 @@
   window.map = {
     enabledMap: enabledMap,
     disabledMap: disabledMap,
+    removePins: removePins
   };
 })();

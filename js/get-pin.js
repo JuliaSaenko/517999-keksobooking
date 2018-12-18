@@ -5,6 +5,7 @@
   var PIN_WIDTH = 50; // data
   var PIN_HEIGHT = 40;
 
+
   var renderPin = function (notice) {
     var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
     var pin = mapPinTemplate.cloneNode(true);

@@ -58,6 +58,13 @@
     closePopupButton.addEventListener('click', closePopup);
   };
 
+  var closeAllPopups = function () {
+    var noticeCards = map.querySelectorAll('.map__card');
+    [].forEach.call(noticeCards, function (noticeCard) {
+      closePopup(noticeCard);
+    });
+  };
+
   var renderCards = function (card) {
     var cardElement = mapCardTemplate.cloneNode(true);
     var featuresItems = cardElement.querySelector('.popup__features');
@@ -132,6 +139,7 @@
     onPopupEscPress: onPopupEscPress,
     closePopup: closePopup,
     openPopup: openPopup,
+    closeAllPopups: closeAllPopups,
     renderCards: renderCards
   };
 })();

@@ -4,6 +4,8 @@
 
   var ESC_KEYCODE = 27;
 
+  var DEBOUNCE_TIMEOUT = 500;
+
   var shuffleArray = function (array) {
     var clonedArray = array.slice();
     for (var i = array.length - 1; i > 0; i--) {
@@ -38,11 +40,19 @@
     }
   };
 
+  var debounce = function (cb) {
+    if (lastTimeout) {
+      clearTimeout(lastTimeout);
+    }
+    var lastTimeout = setTimeout(cb, DEBOUNCE_TIMEOUT);
+  };
+
   window.util = {
     getRandomIntegerFromInterval: getRandomIntegerFromInterval,
     getRandomElementFromArray: getRandomElementFromArray,
     shuffleArray: shuffleArray,
     getRandomSubarray: getRandomSubarray,
-    isEscEvent: isEscEvent
+    isEscEvent: isEscEvent,
+    debounce: debounce
   };
 })();
