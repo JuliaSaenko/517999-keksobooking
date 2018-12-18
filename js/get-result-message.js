@@ -21,7 +21,7 @@
     }
   };
 
-  var onSuccessMessageClick = function () {
+  var onSuccess = function () {
     var resultMessage = successTemplate.cloneNode(true);
     mainBlock.appendChild(resultMessage);
     document.addEventListener('keydown', onResultMessageEscPress);
@@ -29,7 +29,7 @@
     document.querySelector('form.ad-form').reset();
   };
 
-  var onErrorMessageClick = function (error) {
+  var onError = function (error) {
     var resultMessage = errorTemplate.cloneNode(true);
     var resultMessageCloseButton = resultMessage.querySelector('error__button');
     var resultMessageContent = resultMessage.querySelector('.error__message');
@@ -42,7 +42,7 @@
   };
 
   window.getResultMessage = {
-    onSuccessMessageClick: onSuccessMessageClick,
-    onErrorMessageClick: onErrorMessageClick
+    onSuccess: onSuccess,
+    onError: onError
   };
 })();
