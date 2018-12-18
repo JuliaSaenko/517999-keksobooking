@@ -9,10 +9,10 @@
   };
 
   var PrisePerPlase = {
-    bungalo: 0,
-    flat: 1000,
-    house: 5000,
-    palace: 10000
+    BUNGALO: 0,
+    FLAT: 1000,
+    HOUSE: 5000,
+    PLACE: 10000
   };
 
   var adForm = document.querySelector('.ad-form');
@@ -46,6 +46,7 @@
   adForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
     window.backend.upload(new FormData(adForm), window.getResultMessage.onSuccessMessageClick, window.getResultMessage.onErrorMessageClick);
+    disabledForm();
   });
 
   adForm.addEventListener('reset', function () {
