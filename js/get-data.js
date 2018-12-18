@@ -29,11 +29,11 @@
   var LOCATION_Y_MIN = 130;
   var LOCATION_Y_MAX = 630;
 
-  var createNotice = function (count) {
+  var createNoticeData = function (count) {
     var locationX = window.util.getRandomIntegerFromInterval(PIN_WIDTH / 2, BLOCK_WIDTH - PIN_WIDTH / 2);
     var locationY = window.util.getRandomIntegerFromInterval(LOCATION_Y_MIN, LOCATION_Y_MAX);
 
-    var notice = {
+    var data = {
       'author': {
         'avatar': 'img/avatars/user' + (count + 1 < 10 ? '0' + (count + 1) : count + 1) + '.png'
       },
@@ -55,17 +55,17 @@
         'y': locationY
       }
     };
-    return notice;
+    return data;
   };
 
-  var getNotices = function (count) {
+  var getNoticesData = function (count) {
     var notices = [];
     for (var i = 0; i < count; i++) {
-      notices.push(createNotice(i));
+      notices.push(createNoticeData(i));
     }
     return notices;
   };
 
-  window.notices = getNotices;
+  window.getData = getNoticesData;
 
 })();

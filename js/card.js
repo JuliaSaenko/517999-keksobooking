@@ -3,6 +3,7 @@
 (function () {
 
   var map = document.querySelector('.map');
+  var mapContainer = map.querySelector('.map__filters-container');
   var mapCardTemplate = document.querySelector('template').content.querySelector('article.map__card');
   var cardTemplate = document.querySelector('#card').content;
 
@@ -48,24 +49,81 @@
     }
   };
 
+  var openPopup = function (card) {
+    closePopup();
+    map.insertBefore(renderCards(card), mapContainer);
+    document.addEventListener('keydown', onPopupEscPress);
+
+    var closePopupButton = document.querySelector('.popup__close');
+    closePopupButton.addEventListener('click', closePopup);
+  };
+
   var renderCards = function (card) {
     var cardElement = mapCardTemplate.cloneNode(true);
     var featuresItems = cardElement.querySelector('.popup__features');
     var photosItems = cardElement.querySelector('.popup__photos');
 
-    cardElement.querySelector('.popup__title').textContent = card.offer.title;
-    cardElement.querySelector('.popup__text--address').textContent = card.offer.address;
-    cardElement.querySelector('.popup__text--price').textContent = card.offer.price + '₽/ночь';
-    cardElement.querySelector('.popup__type').textContent = PlaceType[card.offer.type];
-    cardElement.querySelector('.popup__text--capacity').textContent = card.offer.rooms + ' комнаты для ' + card.offer.guests + ' гостей';
-    cardElement.querySelector('.popup__text--time').textContent = 'Заезд после' + card.offer.checkin + ' выезд до ' + card.offer.checkout;
-    cardElement.querySelector('.popup__description').textContent = card.offer.description;
-    photosItems.innerHTML = '';
-    cardElement.querySelector('.popup__photos').appendChild(renderPhoto(card));
-    cardElement.querySelector('.popup__avatar').src = card.author.avatar;
+    if (card.offer.title) {
+      cardElement.querySelector('.popup__title').textContent = card.offer.title;
+    } else {
+      cardElement.querySelector('.popup__title').remove();
+    }
 
-    featuresItems.textContent = '';
-    featuresItems.appendChild(renderFeatures(card.offer.features));
+    if (card.offer.address) {
+      cardElement.querySelector('.popup__text--address').textContent = card.offer.address;
+    } else {
+      cardElement.querySelector('.popup__text--address').remove();
+    }
+
+    if (card.offer.price) {
+      cardElement.querySelector('.popup__text--price').textContent = card.offer.price + '₽/ночь';
+    } else {
+      cardElement.querySelector('.popup__text--price').remove();
+    }
+
+    if (card.offer.type) {
+      cardElement.querySelector('.popup__type').textContent = PlaceType[card.offer.type];
+    } else {
+      cardElement.querySelector('.popup__type').remove();
+    }
+
+    if (card.offer.rooms && card.offer.guests) {
+      cardElement.querySelector('.popup__text--capacity').textContent = card.offer.rooms + ' комнаты для ' + card.offer.guests + ' гостей';
+    } else {
+      cardElement.querySelector('.popup__text--capacity').remove();
+    }
+
+    if (card.offer.checkin && card.offer.checkout) {
+      cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + card.offer.checkin + ', выезд до ' + card.offer.checkout;
+    } else {
+      cardElement.querySelector('.popup__text--time').remove();
+    }
+
+    if (card.offer.description) {
+      cardElement.querySelector('.popup__description').textContent = card.offer.description;
+    } else {
+      cardElement.querySelector('.popup__description').remove();
+    }
+
+    if (card.offer.photos) {
+      photosItems.innerHTML = '';
+      photosItems.appendChild(renderPhoto(card));
+    } else {
+      photosItems.remove();
+    }
+
+    if (card.author.avatar) {
+      cardElement.querySelector('.popup__avatar').src = card.author.avatar;
+    } else {
+      cardElement.querySelector('.popup__avatar').remove();
+    }
+
+    if (card.offer.features) {
+      featuresItems.innerHTML = '';
+      featuresItems.appendChild(renderFeatures(card.offer.features));
+    } else {
+      featuresItems.remove();
+    }
 
     return cardElement;
   };
@@ -73,6 +131,7 @@
   window.card = {
     onPopupEscPress: onPopupEscPress,
     closePopup: closePopup,
+    openPopup: openPopup,
     renderCards: renderCards
   };
 })();
