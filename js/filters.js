@@ -57,7 +57,6 @@
   getFilterChange('rooms');
   getFilterChange('guests');
 
-  var ads;
 
   var filterByValue = function (filteredArray, key, value) {
     return filteredArray.filter(function (filterableItem) {
@@ -91,28 +90,28 @@
     return filteredByFeaturesArray;
   };
 
-  var getFiltredPins = function () {
-    var adsCopy = ads.slice();
+  var getFiltredPins = function (array) {
+    var arrayCopy = array.slice();
 
     if (selectElements.value !== 'any') {
-      adsCopy = filterByValue(adsCopy, 'type', selectElements.value);
+      arrayCopy = filterByValue(arrayCopy, 'type', selectElements.value);
     }
     if (priceFieldset.value !== 'any') {
-      adsCopy = filterByPrice(adsCopy, priceFieldset.value);
+      arrayCopy = filterByPrice(arrayCopy, priceFieldset.value);
     }
     if (roomsFieldset.value !== 'any') {
-      adsCopy = filterByValue(adsCopy, 'rooms', roomsFieldset.value);
+      arrayCopy = filterByValue(arrayCopy, 'rooms', roomsFieldset.value);
     }
     if (guestsFieldset.value !== 'any') {
-      adsCopy = filterByValue(adsCopy, 'guests', guestsFieldset.value);
+      arrayCopy = filterByValue(arrayCopy, 'guests', guestsFieldset.value);
     }
-    adsCopy = filterByFeatures(adsCopy);
+    arrayCopy = filterByFeatures(arrayCopy);
 
     window.map.removePins();
     window.card.closeAllPopups();
 
     var elem = someblock.querySelector('.elem');
-    var getfragment = getFilteredFragment(elem, adsCopy);
+    var getfragment = getFilteredFragment(elem, arrayCopy);
     elements('.elements').appendChild(getfragment);
   };
 
@@ -129,12 +128,12 @@
     window.util.debounce(getFiltredPins);
   });
 
-  var getFilteredFragment = function (pinsTemplate, fillingAds) {
+  var getFilteredFragment = function (pins, fillingAds) {
     var fragment = document.createDocumentFragment();
     var resultLength = fillingAds.length < MAX_PIN_RENDERED ? fillingAds.length : MAX_PIN_RENDERED;
 
     for (var i = 0; i < resultLength; i++) {
-      var pinElementCloned = pinsTemplate.cloneNode(true);
+      var pinElementCloned = pins.cloneNode(true);
 
       var renderedPinElement = window.pin.renderPin(pinElementCloned);
       fragment.appendChild(renderedPinElement);
