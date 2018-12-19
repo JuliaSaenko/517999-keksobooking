@@ -1,6 +1,14 @@
 'use strict';
 (function () {
 
+  var START_WEIGHT = 'any';
+  var MAX_PIN_RENDERED = 5;
+
+  var PriceMinMax = {
+    MIN: 10000,
+    MAX: 50000
+  };
+
   var backendData = [];
 
   var mapPinsList = document.querySelector('.map__pins');
@@ -16,14 +24,6 @@
   var rooms;
   var guests;
   var features;
-
-  var START_WEIGHT = 'any';
-  var MAX_PIN_RENDERED = 5;
-
-  var PriceMinMax = {
-    MIN: 10000,
-    MAX: 50000
-  };
 
   var contains = function (where, what) {
     for (var i = 0; i < what.length; i++) {
@@ -130,5 +130,4 @@
     getFiltredPins: getFiltredPins,
     renderFilteredPins: renderFilteredPins
   };
-
 })();
