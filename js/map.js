@@ -9,15 +9,10 @@
   var LOCATION_Y_MIN = 130; // data
   var LOCATION_Y_MAX = 630; // data
 
-  var isPageActive = false;
-
   var map = document.querySelector('.map'); // card,
   var mapPinsList = map.querySelector('.map__pins');
   var mainPin = mapPinsList.querySelector('.map__pin--main');
   var filters = document.querySelector('.map__filters');
-
-  var filterData = {};
-  var backendData = [];
 
   var renderPins = function (list) {
     var fragment = document.createDocumentFragment();
@@ -28,19 +23,6 @@
       }
     }
     mapPinsList.appendChild(fragment);
-  };
-
-  var getFiltredPins = function () {
-    removePins();
-    filterData = window.filters.getFilterData();
-    renderPins(backendData.map(function (item) {
-      window.filters.getNoticeRate(item);
-      return item;
-    })
-     .filter(function (item) {
-       return item.rate === filterData.rate;
-     })
-    );
   };
 
   var removePins = function () {
@@ -56,39 +38,23 @@
     document.querySelector('.map').classList.add('map--faded');
     window.card.closePopup();
     map.classList.add('map--faded');
+    window.filters.resetFilters();
     window.form.disabledForm();
     removePins();
     getPinStartCoords(mainPin);
     mainPin.addEventListener('mouseup', onMainPinMouseDown);
   };
 
-  var enMap = function (data) {
-    backendData = data;
-    map.classList.remove('map--faded');
-    renderPins(data);
-  };
-
   var enabledMap = function () {
-    if (!isPageActive) {
-      window.backend.load(enMap, window.getResultMessage.onError);
-      window.form.enabledForm();
-      isPageActive = true;
-      filters.addEventListener('change', function () {
-        getFiltredPins();
-      });
-    }
+    map.classList.remove('map--faded');
+    window.form.enabledForm();
+    renderPins();
+    window.filters.getFiltredPins();
+    filters.addEventListener('change', window.util.debounce(window.filters.onFilterChange()));
+    filters.addEventListener('change', function () {
+      window.filters.getFiltredPins();
+    });
   };
-
-
-  //  var enabledMap = function (data) {
-  //    backendData = data;
-  //    map.classList.remove('map--faded');
-  //    window.form.enabledForm();
-  //    window.backend.load(renderPins(data), window.getResultMessage.onError);
-  //    filters.addEventListener('change', function () {
-  //      getFiltredPins();
-  //    });
-  //  };
 
   var addressCoords = {};
 
