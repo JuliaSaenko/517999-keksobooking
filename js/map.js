@@ -12,6 +12,7 @@
   var map = document.querySelector('.map'); // card,
   var mapPinsList = map.querySelector('.map__pins');
   var mainPin = mapPinsList.querySelector('.map__pin--main');
+  var filters = document.querySelector('.map__filters');
 
   var renderPins = function (list) {
     var fragment = document.createDocumentFragment();
@@ -37,6 +38,7 @@
     document.querySelector('.map').classList.add('map--faded');
     window.card.closePopup();
     map.classList.add('map--faded');
+    window.filters.resetFilters();
     window.form.disabledForm();
     removePins();
     getPinStartCoords(mainPin);
@@ -46,7 +48,12 @@
   var enabledMap = function () {
     map.classList.remove('map--faded');
     window.form.enabledForm();
-    window.backend.load(renderPins);
+    renderPins();
+    window.filters.getFiltredPins();
+    filters.addEventListener('change', window.util.debounce(window.filters.onFilterChange()));
+    filters.addEventListener('change', function () {
+      window.filters.getFiltredPins();
+    });
   };
 
   var addressCoords = {};
@@ -132,5 +139,6 @@
   window.map = {
     enabledMap: enabledMap,
     disabledMap: disabledMap,
+    removePins: removePins
   };
 })();
