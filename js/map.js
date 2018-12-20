@@ -16,6 +16,8 @@
   var mainPin = mapPinsList.querySelector('.map__pin--main');
   var filters = document.querySelector('.map__filters');
 
+  var backendData = [];
+
   var renderPins = function (data) {
     var fragment = document.createDocumentFragment();
     if (data) {
@@ -27,6 +29,11 @@
       }
       mapPinsList.appendChild(fragment);
     }
+  };
+
+  var renderFiltredPins = function () {
+    removePins();
+    renderPins(backendData);
   };
 
   var removePins = function () {
@@ -49,13 +56,18 @@
     mainPin.addEventListener('mouseup', onMainPinMouseDown);
   };
 
-  var enableMap = function () {
+  var activateMap = function (data) {
+    backendData = data;
     map.classList.remove('map--faded');
+    renderPins(data);
+  };
+
+  var enableMap = function () {
+    // map.classList.remove('map--faded');
     window.form.enableForm();
-    renderPins();
     window.filters.getFiltredPins();
 
-    window.backend.load(window.filter.onSuccess, window.getResultMessage.onErrorMessageClick);
+    window.backend.load(activateMap, window.getResultMessage.onErrorMessageClick);
 
     filters.addEventListener('change', window.util.debounce(window.filters.onFilterChange()));
     filters.addEventListener('change', function () {
@@ -146,7 +158,7 @@
   window.map = {
     enableMap: enableMap,
     disableMap: disableMap,
-    renderPins: renderPins,
+    renderFiltredPins: renderFiltredPins,
     removePins: removePins
   };
 })();

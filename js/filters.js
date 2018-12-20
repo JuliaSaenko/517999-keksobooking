@@ -71,7 +71,7 @@
         return contains(notice.offer.features, features);
       });
     }
-    window.map.renderPins(arrayCopy);
+    window.map.renderFiltredPins(arrayCopy);
   };
 
   var onFilterChange = function () {
@@ -102,13 +102,14 @@
     onFilterChange();
   };
 
-  var onSuccess = function (data) {
-    backendData = data;
-  };
+  // var onSuccess = function (data) {
+  //   backendData = data;
+  // };
 
   window.filters = {
     resetFilters: resetFilters,
     getFiltredPins: getFiltredPins,
-    onSuccess: onSuccess
+    onFilterChange: onFilterChange
+    // onSuccess: onSuccess
   };
 })();
