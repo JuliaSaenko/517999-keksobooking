@@ -10,10 +10,10 @@
                         .querySelector('.error');
 
   var onResultMessageEscPress = function (evt) {
-    window.util.isEscEvent(evt, closeResultMessage);
+    window.util.isEscEvent(evt, onCloseResultMessageBtnClick);
   };
 
-  var closeResultMessage = function () {
+  var onCloseResultMessageBtnClick = function () {
     var resultMessage = mainBlock.querySelector('.success') || mainBlock.querySelector('.error');
     if (resultMessage) {
       mainBlock.removeChild(resultMessage);
@@ -25,7 +25,7 @@
     var resultMessage = successTemplate.cloneNode(true);
     mainBlock.appendChild(resultMessage);
     document.addEventListener('keydown', onResultMessageEscPress);
-    resultMessage.addEventListener('click', closeResultMessage);
+    resultMessage.addEventListener('click', onCloseResultMessageBtnClick);
     document.querySelector('form.ad-form').reset();
   };
 
@@ -37,8 +37,8 @@
     resultMessageContent.style.whiteSpace = 'pre';
     mainBlock.appendChild(resultMessage);
     document.addEventListener('keydown', onResultMessageEscPress);
-    resultMessage.addEventListener('click', closeResultMessage);
-    resultMessageCloseButton.addEventListener('click', closeResultMessage);
+    resultMessage.addEventListener('click', onCloseResultMessageBtnClick);
+    resultMessageCloseButton.addEventListener('click', onCloseResultMessageBtnClick);
   };
 
   window.getResultMessage = {

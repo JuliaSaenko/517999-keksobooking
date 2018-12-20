@@ -6,23 +6,27 @@
   var MAP_WIDTH = 1200;
   var MAP_HEIGHT = 750;
 
-  var LOCATION_Y_MIN = 130; // data
-  var LOCATION_Y_MAX = 630; // data
+  var LOCATION_Y_MIN = 130;
+  var LOCATION_Y_MAX = 630;
 
-  var map = document.querySelector('.map'); // card,
+  var MAX_PIN_RENDERED = 5;
+
+  var map = document.querySelector('.map');
   var mapPinsList = map.querySelector('.map__pins');
   var mainPin = mapPinsList.querySelector('.map__pin--main');
   var filters = document.querySelector('.map__filters');
 
-  var renderPins = function (list) {
+  var renderPins = function (data) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < list.length; i++) {
-      if (list[i].offer) {
-        var pin = window.getPin(list[i]);
-        fragment.appendChild(pin);
+    if (data) {
+      var takeNumber = data.length > MAX_PIN_RENDERED ? MAX_PIN_RENDERED : data.length;
+      for (var i = 0; i < takeNumber; i++) {
+        if ('offer' in data[i]) {
+          fragment.appendChild(window.getPin(data[i]));
+        }
       }
+      mapPinsList.appendChild(fragment);
     }
-    mapPinsList.appendChild(fragment);
   };
 
   var removePins = function () {
@@ -34,22 +38,25 @@
     }
   };
 
-  var disabledMap = function () {
+  var disableMap = function () {
     document.querySelector('.map').classList.add('map--faded');
-    window.card.closePopup();
+    window.card.onCloseBtnPress();
     map.classList.add('map--faded');
     window.filters.resetFilters();
-    window.form.disabledForm();
+    window.form.disableForm();
     removePins();
     getPinStartCoords(mainPin);
     mainPin.addEventListener('mouseup', onMainPinMouseDown);
   };
 
-  var enabledMap = function () {
+  var enableMap = function () {
     map.classList.remove('map--faded');
-    window.form.enabledForm();
+    window.form.enableForm();
     renderPins();
     window.filters.getFiltredPins();
+
+    window.backend.load(window.filter.onSuccess, window.getResultMessage.onErrorMessageClick);
+
     filters.addEventListener('change', window.util.debounce(window.filters.onFilterChange()));
     filters.addEventListener('change', function () {
       window.filters.getFiltredPins();
@@ -71,10 +78,10 @@
   };
 
   var onMainPinMouseDown = function () {
-    enabledMap();
+    enableMap();
     addressCoords = getPinStartCoords(mainPin);
     window.form.setAddressCoords(addressCoords);
-    window.form.enabledForm();
+    window.form.enableForm();
     mainPin.removeEventListener('mouseup', onMainPinMouseDown);
   };
 
@@ -137,8 +144,9 @@
   mainPin.addEventListener('mouseup', onMainPinMouseDown);
 
   window.map = {
-    enabledMap: enabledMap,
-    disabledMap: disabledMap,
+    enableMap: enableMap,
+    disableMap: disableMap,
+    renderPins: renderPins,
     removePins: removePins
   };
 })();

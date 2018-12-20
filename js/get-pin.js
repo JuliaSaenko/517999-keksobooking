@@ -2,7 +2,7 @@
 
 (function () {
 
-  var PIN_WIDTH = 50; // data
+  var PIN_WIDTH = 50;
   var PIN_HEIGHT = 40;
 
 

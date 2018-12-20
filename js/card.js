@@ -38,10 +38,10 @@
   };
 
   var onPopupEscPress = function (evt) {
-    window.util.isEscEvent(evt, closePopup);
+    window.util.isEscEvent(evt, onCloseBtnPress);
   };
 
-  var closePopup = function () {
+  var onCloseBtnPress = function () {
     var noticeCard = map.querySelector('.map__card.popup');
     if (noticeCard) {
       map.removeChild(noticeCard);
@@ -50,18 +50,18 @@
   };
 
   var openPopup = function (card) {
-    closePopup();
+    onCloseBtnPress();
     map.insertBefore(renderCards(card), mapContainer);
     document.addEventListener('keydown', onPopupEscPress);
 
     var closePopupButton = document.querySelector('.popup__close');
-    closePopupButton.addEventListener('click', closePopup);
+    closePopupButton.addEventListener('click', onCloseBtnPress);
   };
 
   var closeAllPopups = function () {
     var noticeCards = map.querySelectorAll('.map__card');
     [].forEach.call(noticeCards, function (noticeCard) {
-      closePopup(noticeCard);
+      onCloseBtnPress(noticeCard);
     });
   };
 
@@ -137,7 +137,7 @@
 
   window.card = {
     onPopupEscPress: onPopupEscPress,
-    closePopup: closePopup,
+    onCloseBtnPress: onCloseBtnPress,
     openPopup: openPopup,
     closeAllPopups: closeAllPopups,
     renderCards: renderCards
