@@ -55,7 +55,7 @@
     renderPins();
     window.filters.getFiltredPins();
 
-    window.backend.load(window.filter.onSuccess, window.getResultMessage.onErrorMessageClick);
+    window.backend.load(window.filter.onSuccessMessageClick, window.getResultMessage.onErrorMessageClick);
 
     filters.addEventListener('change', window.util.debounce(window.filters.onFilterChange()));
     filters.addEventListener('change', function () {
