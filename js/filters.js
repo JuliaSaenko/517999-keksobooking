@@ -105,7 +105,6 @@
     getFiltredPins();
   };
 
-  // filtersForm.addEventListener('change', window.util.debounce(onFilterChange));
 
   var resetFilters = function () {
     filterType.value = START_WEIGHT;
