@@ -41,10 +41,17 @@
   };
 
   var debounce = function (cb) {
-    if (lastTimeout) {
-      clearTimeout(lastTimeout);
-    }
-    var lastTimeout = setTimeout(cb, DEBOUNCE_TIMEOUT);
+    var lastTimeout = null;
+
+    return function () {
+      var parameters = arguments;
+      if (lastTimeout) {
+        window.clearTimeout(lastTimeout);
+      }
+      lastTimeout = window.setTimeout(function () {
+        cb.apply(null, parameters);
+      }, DEBOUNCE_TIMEOUT);
+    };
   };
 
   window.util = {

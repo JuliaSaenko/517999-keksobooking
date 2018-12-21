@@ -20,20 +20,13 @@
 
   var renderPins = function (data) {
     var fragment = document.createDocumentFragment();
-    if (data) {
-      var takeNumber = data.length > MAX_PIN_RENDERED ? MAX_PIN_RENDERED : data.length;
-      for (var i = 0; i < takeNumber; i++) {
-        if ('offer' in data[i]) {
-          fragment.appendChild(window.getPin(data[i]));
-        }
+    for (var i = 0; i < Math.min(MAX_PIN_RENDERED, data.length); i++) {
+      if (!data[i].offer) {
+        continue;
       }
-      mapPinsList.appendChild(fragment);
+      fragment.appendChild(window.getPin(data[i]));
     }
-  };
-
-  var renderFiltredPins = function () {
-    removePins();
-    renderPins(backendData);
+    mapPinsList.appendChild(fragment);
   };
 
   var removePins = function () {
@@ -45,15 +38,27 @@
     }
   };
 
-  var onSuccess = function (data) {
+  var onSuccessFiltered = function (data) {
     backendData = data;
+    renderPins(backendData);
+    filters.addEventListener('change', window.util.debounce(onFilter));
+  };
+
+  var onFilter = function () {
+    var filteredData = window.filters.getFiltredPins(backendData);
+    removePins();
+    window.card.onCloseBtnPress();
+    renderPins(filteredData);
+    filters.addEventListener('change', function () {
+      window.filters.getFiltredPins();
+    });
   };
 
   var disableMap = function () {
     document.querySelector('.map').classList.add('map--faded');
     window.card.onCloseBtnPress();
     map.classList.add('map--faded');
-    window.filters.resetFilters();
+    window.filters.getFiltredPins.reset();
     window.form.disableForm();
     removePins();
     getPinStartCoords(mainPin);
@@ -62,16 +67,9 @@
 
   var enableMap = function () {
     map.classList.remove('map--faded');
-    renderFiltredPins();
     window.form.enableForm();
-    window.filters.getFiltredPins();
 
-    window.backend.load(onSuccess, window.getResultMessage.onErrorMessageClick);
-
-    filters.addEventListener('change', window.util.debounce(window.filters.onFilterChange()));
-    filters.addEventListener('change', function () {
-      window.filters.getFiltredPins();
-    });
+    window.backend.load(onSuccessFiltered, window.getResultMessage.onErrorMessageClick);
   };
 
   var addressCoords = {};
