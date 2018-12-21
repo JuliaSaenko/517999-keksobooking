@@ -51,23 +51,31 @@
     renderPins(filteredData);
   };
 
+  var deactivatePage = function () {
+    disableMap();
+    window.filters.disableFilters();
+    window.form.disableForm();
+  };
+
   var disableMap = function () {
     document.querySelector('.map').classList.add('map--faded');
     window.card.onCloseBtnPress();
     map.classList.add('map--faded');
     filters.reset();
-    window.filters.disableFilters();
-    window.form.disableForm();
     removePins();
     mainPin.style.left = MAP_WIDTH / 2;
     mainPin.style.top = MAP_HEIGHT / 2;
     mainPin.addEventListener('mouseup', onMainPinMouseDown);
   };
 
+  var activatePage = function () {
+    enableMap();
+    window.form.enableForm();
+    window.filters.enableFilters();
+  };
+
   var enableMap = function () {
     map.classList.remove('map--faded');
-    window.form.enableForm();
-
     window.backend.load(onSuccessFiltered, window.getResultMessage.onErrorMessageClick);
   };
 
@@ -86,10 +94,9 @@
   };
 
   var onMainPinMouseDown = function () {
-    enableMap();
+    activatePage();
     addressCoords = getPinStartCoords(mainPin);
     window.form.setAddressCoords(addressCoords);
-    window.form.enableForm();
     mainPin.removeEventListener('mouseup', onMainPinMouseDown);
   };
 
@@ -153,7 +160,7 @@
 
   window.map = {
     enableMap: enableMap,
-    disableMap: disableMap,
+    deactivatePage: deactivatePage,
     renderPins: renderPins,
     removePins: removePins
   };

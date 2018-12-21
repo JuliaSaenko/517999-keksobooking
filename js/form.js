@@ -16,6 +16,7 @@
   };
 
   var adForm = document.querySelector('.ad-form');
+  var adFormSubmit = adForm.querySelector('.ad-form__submit');
 
   var adFormRoomFieldset = adForm.querySelector('#room_number');
   var adFormCapasityFieldset = adForm.querySelector('#capacity');
@@ -34,6 +35,7 @@
     }
     adFormPriceFieldset.placeholder = 1000;
     adFormPriceFieldset.min = 1000;
+
   };
 
   var enableForm = function () {
@@ -41,17 +43,22 @@
     for (var i = 0; i < adFormFieldsets.length; i++) {
       adFormFieldsets[i].disabled = false;
     }
+    adFormSubmit.addEventListener('click', onSubmitClick);
   };
 
-  adForm.addEventListener('submit', function (evt) {
-    evt.preventDefault();
-    window.backend.upload(new FormData(adForm), window.getResultMessage.onSuccessMessageClick, window.getResultMessage.onErrorMessageClick);
-    disableForm();
-  });
+  var onSubmitClick = function (evt) {
+    if (!adForm.checkValidity()) {
+      adForm.classList.add('ad-form--invalid');
+    } else {
+      evt.preventDefault();
+      adForm.classList.remove('ad-form--invalid');
+      window.backend.upload(new FormData(adForm), window.getResultMessage.onSuccessMessageClick, window.getResultMessage.onErrorMessageClick);
+    }
+  };
 
   adForm.addEventListener('reset', function () {
     setTimeout(function () {
-      window.map.disableMap();
+      window.map.deactivatePage();
     }, 0);
   });
 
