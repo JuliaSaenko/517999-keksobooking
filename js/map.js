@@ -47,11 +47,7 @@
   var onFilter = function () {
     var filteredData = window.filters.getFiltredPins(backendData);
     removePins();
-    window.card.onCloseBtnPress();
     renderPins(filteredData);
-    filters.addEventListener('change', function () {
-      window.filters.getFiltredPins();
-    });
   };
 
   var disableMap = function () {
