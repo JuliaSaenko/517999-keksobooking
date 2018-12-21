@@ -59,7 +59,8 @@
     window.filters.disableFilters();
     window.form.disableForm();
     removePins();
-    getPinStartCoords(mainPin);
+    mainPin.style.left = MAP_WIDTH / 2;
+    mainPin.style.top = MAP_HEIGHT / 2;
     mainPin.addEventListener('mouseup', onMainPinMouseDown);
   };
 
