@@ -38,18 +38,18 @@
     }
   };
 
-  // var onSuccessFiltered = function (data) {
-  //   backendData = data;
-  //   renderPins(backendData);
-  //   filters.addEventListener('change', window.util.debounce(onFilter));
-  //   window.filters.enableFilters();
-  // };
-  //
-  // var onFilter = function () {
-  //   var filteredData = window.filters.getFiltredPins(backendData);
-  //   removePins();
-  //   renderPins(filteredData);
-  // };
+  var onSuccessFiltered = function (data) {
+    backendData = data;
+    renderPins(backendData);
+    filters.addEventListener('change', window.util.debounce(onFilter));
+    window.filters.enableFilters();
+  };
+
+  var onFilter = function () {
+    var filteredData = window.filters.getFiltredPins(backendData);
+    removePins();
+    renderPins(filteredData);
+  };
 
   var disableMap = function () {
     document.querySelector('.map').classList.add('map--faded');
