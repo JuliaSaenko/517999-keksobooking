@@ -42,6 +42,7 @@
     backendData = data;
     renderPins(backendData);
     filters.addEventListener('change', window.util.debounce(onFilter));
+    window.filters.enableFilters();
   };
 
   var onFilter = function () {
@@ -55,6 +56,7 @@
     window.card.onCloseBtnPress();
     map.classList.add('map--faded');
     window.filters.getFiltredPins.reset();
+    window.filters.disableFilters();
     window.form.disableForm();
     removePins();
     getPinStartCoords(mainPin);

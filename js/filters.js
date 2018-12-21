@@ -4,6 +4,8 @@
   var START_WEIGHT = 'any';
 
   var filtersForm = document.querySelector('.map__filters');
+  var filtersSelect = filtersForm.querySelectorAll('select');
+  var filtersFieldsets = filtersForm.querySelectorAll('fieldset');
 
   var getFiltredPins = function (data) {
     var arrayCopy = data.slice();
@@ -48,7 +50,27 @@
     return filtredNotices;
   };
 
+  var disableFilters = function () {
+    for (var i = 0; i < filtersSelect.length; i++) {
+      filtersSelect[i].disabled = true;
+    }
+    for (var j = 0; j < filtersFieldsets.length; j++) {
+      filtersFieldsets[j].disabled = true;
+    }
+  };
+
+  var enableFilters = function () {
+    for (var i = 0; i < filtersSelect.length; i++) {
+      filtersSelect[i].disabled = false;
+    }
+    for (var j = 0; j < filtersFieldsets.length; j++) {
+      filtersFieldsets[j].disabled = false;
+    }
+  };
+
   window.filters = {
-    getFiltredPins: getFiltredPins
+    getFiltredPins: getFiltredPins,
+    enableFilters: enableFilters,
+    disableFilters: disableFilters
   };
 })();
