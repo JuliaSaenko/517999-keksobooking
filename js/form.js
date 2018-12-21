@@ -27,7 +27,7 @@
   var adFormFieldsets = adForm.querySelectorAll('fieldset');
   var adFormAddressFieldset = adForm.querySelector('#address');
 
-  var disabledForm = function () {
+  var disableForm = function () {
     adForm.classList.add('ad-form--disabled');
     for (var i = 0; i < adFormFieldsets.length; i++) {
       adFormFieldsets[i].disabled = true;
@@ -36,7 +36,7 @@
     adFormPriceFieldset.min = 1000;
   };
 
-  var enabledForm = function () {
+  var enableForm = function () {
     adForm.classList.remove('ad-form--disabled');
     for (var i = 0; i < adFormFieldsets.length; i++) {
       adFormFieldsets[i].disabled = false;
@@ -46,12 +46,12 @@
   adForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
     window.backend.upload(new FormData(adForm), window.getResultMessage.onSuccessMessageClick, window.getResultMessage.onErrorMessageClick);
-    disabledForm();
+    disableForm();
   });
 
   adForm.addEventListener('reset', function () {
     setTimeout(function () {
-      window.map.disabledMap();
+      window.map.disableMap();
     }, 0);
   });
 
@@ -59,7 +59,7 @@
     adFormAddressFieldset.value = coords.x + ', ' + coords.y;
   };
 
-  var roomChangingFieldset = function () {
+  var onChangeRoomFieldset = function () {
     var guests = GuestsInRoom['ROOM_' + adFormRoomFieldset.value];
     var isMatch = guests.includes(adFormCapasityFieldset.value);
     if (isMatch) {
@@ -69,8 +69,8 @@
     }
   };
 
-  adFormRoomFieldset.addEventListener('change', roomChangingFieldset);
-  adFormCapasityFieldset.addEventListener('change', roomChangingFieldset);
+  adFormRoomFieldset.addEventListener('change', onChangeRoomFieldset);
+  adFormCapasityFieldset.addEventListener('change', onChangeRoomFieldset);
 
   adFormTypeFieldset.addEventListener('change', function () {
     var key = adFormTypeFieldset.value.toUpperCase();
@@ -87,8 +87,8 @@
   });
 
   window.form = {
-    disabledForm: disabledForm,
-    enabledForm: enabledForm,
+    disableForm: disableForm,
+    enableForm: enableForm,
     setAddressCoords: setAddressCoords
   };
 })();
