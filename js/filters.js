@@ -71,7 +71,7 @@
         return contains(notice.offer.features, features);
       });
     }
-    window.map.renderFiltredPins(arrayCopy);
+    window.map.renderPins(arrayCopy);
   };
 
   var onFilterChange = function () {
@@ -101,10 +101,6 @@
     }
     onFilterChange();
   };
-
-  // var onSuccess = function (data) {
-  //   backendData = data;
-  // };
 
   window.filters = {
     resetFilters: resetFilters,
