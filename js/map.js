@@ -55,7 +55,7 @@
     document.querySelector('.map').classList.add('map--faded');
     window.card.onCloseBtnPress();
     map.classList.add('map--faded');
-    window.filters.getFiltredPins.reset();
+    filters.reset();
     window.filters.disableFilters();
     window.form.disableForm();
     removePins();
