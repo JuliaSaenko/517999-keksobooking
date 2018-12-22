@@ -31,6 +31,7 @@
 
   var removePins = function () {
     var mapPins = document.querySelectorAll('.map__pin');
+    window.card.onCloseBtnPress();
     for (var i = 0; i < mapPins.length; i++) {
       if (!mapPins[i].classList.contains('map__pin--main')) {
         mapPinsList.removeChild(mapPins[i]);
@@ -55,16 +56,19 @@
     disableMap();
     window.filters.disableFilters();
     window.form.disableForm();
+    window.uploadFiles.resetAvatarPhoto();
+    window.uploadFiles.resetNoticePhotos();
+    mainPin.style.left = MAP_WIDTH / 2 + 'px';
+    mainPin.style.top = MAP_HEIGHT / 2 + 'px';
+    getPinStartCoords(mainPin);
   };
 
   var disableMap = function () {
-    document.querySelector('.map').classList.add('map--faded');
     window.card.onCloseBtnPress();
     map.classList.add('map--faded');
     filters.reset();
     removePins();
-    mainPin.style.left = MAP_WIDTH / 2;
-    mainPin.style.top = MAP_HEIGHT / 2;
+
     mainPin.addEventListener('mouseup', onMainPinMouseDown);
   };
 

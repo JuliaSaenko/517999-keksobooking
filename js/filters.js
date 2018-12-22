@@ -7,14 +7,14 @@
   var filtersSelect = filtersForm.querySelectorAll('select');
   var filtersFieldsets = filtersForm.querySelectorAll('fieldset');
 
+  var filterType = filtersForm.querySelector('#housing-type').value;
+  var filterPrice = filtersForm.querySelector('#housing-price').value;
+  var filterRooms = filtersForm.querySelector('#housing-rooms').value;
+  var filterGuests = filtersForm.querySelector('#housing-guests').value;
+  var filterFeatures = filtersForm.querySelector('#housing-features').querySelectorAll('input[name=features]:checked');
+
   var getFiltredPins = function (data) {
     var arrayCopy = data.slice();
-
-    var filterType = filtersForm.querySelector('#housing-type').value;
-    var filterPrice = filtersForm.querySelector('#housing-price').value;
-    var filterRooms = filtersForm.querySelector('#housing-rooms').value;
-    var filterGuests = filtersForm.querySelector('#housing-guests').value;
-    var filterFeatures = filtersForm.querySelector('#housing-features').querySelectorAll('input[name=features]:checked');
 
     var featuresValue = [];
     for (var i = 0; i < filterFeatures.length; i++) {
