@@ -12,7 +12,7 @@
     BUNGALO: 0,
     FLAT: 1000,
     HOUSE: 5000,
-    PLACE: 10000
+    PALACE: 10000
   };
 
   var adForm = document.querySelector('.ad-form');

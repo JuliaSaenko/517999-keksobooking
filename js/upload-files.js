@@ -73,7 +73,7 @@
   };
 
   var resetNoticePhotos = function () {
-    var housePhotos = window.form.adForm.querySelectorAll('#photo');
+    var housePhotos = adForm.querySelectorAll('#photo');
     housePhotos.forEach(function (photo) {
       photo.remove();
     });
