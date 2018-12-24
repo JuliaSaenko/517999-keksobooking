@@ -31,6 +31,7 @@
 
   var removePins = function () {
     var mapPins = document.querySelectorAll('.map__pin');
+    window.card.onCloseBtnPress();
     for (var i = 0; i < mapPins.length; i++) {
       if (!mapPins[i].classList.contains('map__pin--main')) {
         mapPinsList.removeChild(mapPins[i]);
@@ -55,23 +56,26 @@
     disableMap();
     window.filters.disableFilters();
     window.form.disableForm();
+    window.uploadFiles.resetAvatarPhoto();
+    window.uploadFiles.resetNoticePhotos();
   };
 
   var disableMap = function () {
-    document.querySelector('.map').classList.add('map--faded');
     window.card.onCloseBtnPress();
     map.classList.add('map--faded');
     filters.reset();
     removePins();
-    mainPin.style.left = MAP_WIDTH / 2;
-    mainPin.style.top = MAP_HEIGHT / 2;
+    mainPin.style.left = MAP_WIDTH / 2 + 'px';
+    mainPin.style.top = MAP_HEIGHT / 2 + 'px';
+
     mainPin.addEventListener('mouseup', onMainPinMouseDown);
+    mainPin.addEventListener('click', activatePage);
   };
 
   var activatePage = function () {
     enableMap();
     window.form.enableForm();
-    window.filters.enableFilters();
+    mainPin.removeEventListener('click', activatePage);
   };
 
   var enableMap = function () {
@@ -94,7 +98,6 @@
   };
 
   var onMainPinMouseDown = function () {
-    activatePage();
     addressCoords = getPinStartCoords(mainPin);
     window.form.setAddressCoords(addressCoords);
     mainPin.removeEventListener('mouseup', onMainPinMouseDown);
@@ -157,6 +160,8 @@
   });
 
   mainPin.addEventListener('mouseup', onMainPinMouseDown);
+  mainPin.addEventListener('click', activatePage);
+
 
   window.map = {
     enableMap: enableMap,

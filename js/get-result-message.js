@@ -31,7 +31,7 @@
 
   var onErrorMessageClick = function (error) {
     var resultMessage = errorTemplate.cloneNode(true);
-    var resultMessageCloseButton = resultMessage.querySelector('error__button');
+    var resultMessageCloseButton = resultMessage.querySelector('.error__button');
     var resultMessageContent = resultMessage.querySelector('.error__message');
     resultMessageContent.textContent = resultMessageContent.textContent + '\r\n' + error;
     resultMessageContent.style.whiteSpace = 'pre';

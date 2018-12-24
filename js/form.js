@@ -12,7 +12,7 @@
     BUNGALO: 0,
     FLAT: 1000,
     HOUSE: 5000,
-    PLACE: 10000
+    PALACE: 10000
   };
 
   var adForm = document.querySelector('.ad-form');
@@ -30,20 +30,31 @@
 
   var disableForm = function () {
     adForm.classList.add('ad-form--disabled');
-    for (var i = 0; i < adFormFieldsets.length; i++) {
-      adFormFieldsets[i].disabled = true;
-    }
+    adFormFieldsets.forEach(function (field) {
+      field.disabled = true;
+    });
     adFormPriceFieldset.placeholder = 1000;
     adFormPriceFieldset.min = 1000;
 
+    adFormSubmit.removeEventListener('click', onSubmitClick);
+    adFormTypeFieldset.removeEventListener('change', setMinPrice);
+    adFormRoomFieldset.removeEventListener('change', onChangeRoomFieldset);
+    adFormCapasityFieldset.removeEventListener('change', onChangeRoomFieldset);
+    adFormCheckInFieldset.removeEventListener('change', onChangeCheckIn);
+    adFormCheckOutFieldset.removeEventListener('change', onChangeCheckOut);
   };
 
   var enableForm = function () {
     adForm.classList.remove('ad-form--disabled');
-    for (var i = 0; i < adFormFieldsets.length; i++) {
-      adFormFieldsets[i].disabled = false;
-    }
+    adFormFieldsets.forEach(function (field) {
+      field.disabled = false;
+    });
     adFormSubmit.addEventListener('click', onSubmitClick);
+    adFormTypeFieldset.addEventListener('change', setMinPrice);
+    adFormRoomFieldset.addEventListener('change', onChangeRoomFieldset);
+    adFormCapasityFieldset.addEventListener('change', onChangeRoomFieldset);
+    adFormCheckInFieldset.addEventListener('change', onChangeCheckIn);
+    adFormCheckOutFieldset.addEventListener('change', onChangeCheckOut);
   };
 
   var onSubmitClick = function (evt) {
@@ -54,6 +65,22 @@
       adForm.classList.remove('ad-form--invalid');
       window.backend.upload(new FormData(adForm), window.getResultMessage.onSuccessMessageClick, window.getResultMessage.onErrorMessageClick);
     }
+  };
+
+  var setMinPrice = function () {
+    var key = adFormTypeFieldset.value.toUpperCase();
+    adFormPriceFieldset.min = PrisePerPlase[key];
+    adFormPriceFieldset.placeholder = PrisePerPlase[key];
+  };
+
+  var onChangeCheckOut = function () {
+    var checkTime = adFormCheckOutFieldset.value;
+    adFormCheckInFieldset.value = checkTime;
+  };
+
+  var onChangeCheckIn = function () {
+    var checkTime = adFormCheckInFieldset.value;
+    adFormCheckOutFieldset.value = checkTime;
   };
 
   adForm.addEventListener('reset', function () {
@@ -75,23 +102,6 @@
       adFormCapasityFieldset.setCustomValidity('"Это вам не подходит"');
     }
   };
-
-  adFormRoomFieldset.addEventListener('change', onChangeRoomFieldset);
-  adFormCapasityFieldset.addEventListener('change', onChangeRoomFieldset);
-
-  adFormTypeFieldset.addEventListener('change', function () {
-    var key = adFormTypeFieldset.value.toUpperCase();
-    adFormPriceFieldset.min = PrisePerPlase[key];
-    adFormPriceFieldset.placeholder = PrisePerPlase[key];
-  });
-  adFormCheckInFieldset.addEventListener('change', function () {
-    var checkTime = adFormCheckInFieldset.value;
-    adFormCheckOutFieldset.value = checkTime;
-  });
-  adFormCheckOutFieldset.addEventListener('change', function () {
-    var checkTime = adFormCheckOutFieldset.value;
-    adFormCheckInFieldset.value = checkTime;
-  });
 
   window.form = {
     disableForm: disableForm,
